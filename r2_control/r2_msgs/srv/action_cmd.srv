@@ -1,0 +1,8 @@
+# YourService.srv
+nav_msgs/Odometry odomData  # 请求的数据类型
+
+---
+# 服务器响应的数据类型
+std_msgs/Float32 POS_X
+std_msgs/Float32 POS_Y
+std_msgs/Float32 Yaw
