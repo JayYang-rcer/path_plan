@@ -7,8 +7,8 @@ rc_hw:
   thread_priority: 95
   actions:
     location_action: # action names
-      # serial_port: "/dev/action"
-      serial_port: "/dev/ttyUSB2"
+      serial_port: "/dev/action"
+      # serial_port: "/dev/ttyUSB2"
 
   # Configurations of the actuators
   #  actuators:

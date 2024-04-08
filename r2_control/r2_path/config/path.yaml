@@ -47,6 +47,6 @@ path_plan:
 
   path1_Yaw_pid: 
     {
-      p: 0.05, i: 0.0, d: 0.05, out_max: 1.0, dead_zone: 1, I_Separate: 500, I_Limit: 500, pre_feed: 0.0
+      p: 0.01, i: 0.0, d: 0.05, out_max: 1.0, dead_zone: 1, I_Separate: 500, I_Limit: 500, pre_feed: 0.0
     }
   

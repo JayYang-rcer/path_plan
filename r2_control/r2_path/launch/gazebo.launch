@@ -12,7 +12,7 @@
     <param name="robot_description"
         command="$(find xacro)/xacro $(find urdf01_gazebo)/urdf/rc_r2/chassis.urdf.xacro" />
     <rosparam file="$(find rc_gazebo)/config/actions.yaml" command="load" if="true"/>
-   
+    
     <!-- 在 gazebo 中显示机器人模型 -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" clear_params="true"
         args="-param robot_description -urdf -model Four_wheel_chassis -x 5.5 -y 0.5 -z 0.1" output="screen" />

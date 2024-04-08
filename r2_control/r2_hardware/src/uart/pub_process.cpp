@@ -10,7 +10,7 @@ int main(int argc, char * argv[])
     setlocale(LC_ALL, "");
     ros::NodeHandle nh;
     uart_stm32 uart_stm32;
-    
+    ROS_INFO("ros to stm32 information process start");
     ros::Rate loop_rate(100);
     
     while (ros::ok())
@@ -37,7 +37,7 @@ uart_stm32::uart_stm32()
     }
     
     //use to accieve chassis cmd
-    chassis_sub = nh.subscribe<geometry_msgs::Twist>("cmd_vel",1,&uart_stm32::do_vel_Msg,this);
+    chassis_sub = nh.subscribe<geometry_msgs::Twist>("/cmd_vel",1,&uart_stm32::do_vel_Msg,this);
 
     //use to acieve controller cmd without chassis
     shangceng_sub = nh.subscribe<r2_msgs::controller_cmd>("r2_control",10,&uart_stm32::control_callback,this);   
@@ -70,6 +70,7 @@ void uart_stm32::control_callback(const r2_msgs::controller_cmd::ConstPtr &msg_p
     controller.chassis_ctrl_flag = msg_p->chassis_ctrl_flag;
     controller.next_bp_state = msg_p->next_bp_state;
     controller.next_fw_state = msg_p->next_fw_state;
+    controller.is_fw_open_flag = msg_p->is_fw_open_flag;
     last_msg_time = ros::Time::now();   //获取更新上层控制命令的时间戳
 }
 

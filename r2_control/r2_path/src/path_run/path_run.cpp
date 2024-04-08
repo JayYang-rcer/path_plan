@@ -8,8 +8,9 @@ path_run::path_run()
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel",1);
     ball_pos_sub = nh.subscribe<r2_msgs::path_cmd>("/path_cmd",1,&path_run::path_cmd_callback,this);
 	target_vel_pub = nh.advertise<geometry_msgs::Point>("/target_vel",1);
+	path_status_pub = nh.advertise<r2_msgs::path_status>("/path_status",1);
     mode = last_mode = Hand;
-    robot_start_pos_flag=recieve_ball_flag=path_res=0;
+    path_plan_start=recieve_ball_flag=path_res=0;
 
 	//init the silo position
 	pos_silo_one.x = 500;   pos_silo_one.y = 8500;    pos_silo_one.z = 0;
@@ -104,6 +105,11 @@ void path_run::run()
 			// ROS_INFO("path_res:%d",path_res);	
         }
 
+		path_status_.destination_arrived = take_put_arrive_flag;
+		path_status_.now_path_mode = mode;
+		path_status_.now_target_point = target_ball_pos;
+		path_status_pub.publish(path_status_);
+
         rate.sleep();
         ros::spinOnce();
     }
@@ -116,7 +122,7 @@ void path_run::fsm_path()
     {
         case LockupPoint_e:
         {
-            path.LockupPoint(Target_Lockup_X,Target_Lockup_Y,Target_Lockup_YAW,1.5,1.5);
+            path.LockupPoint(target_ball_pos.x,target_ball_pos.y,target_ball_pos.z,1.5,1.5);
             break;
         }
 
@@ -169,11 +175,12 @@ void path_run::fsm_path()
 							break;
 					}
 				}
+				// path.LockupPoint(target_ball_pos.x,target_ball_pos.y,target_ball_pos.z,1.5,1.5);
             }	
 
 			// if the distance is smaller than 50mm, the robot is arrived, 
 			// we should add the flag that we have taken the ball or put the ball in the future, it's very important
-			if(ball_distance > 50)	
+			if(ball_distance > 20)	
 			    take_put_arrive_flag = 0;
 			else
 				take_put_arrive_flag = 1;
@@ -192,9 +199,10 @@ void path_run::path_cmd_callback(const r2_msgs::path_cmd::ConstPtr& path_cmd)
 {
 	recieve_ball_flag = 1;
 	path_stauts(*path_cmd);
+	
 	ball_distance = distance_of_two_point(target_ball_pos.x,target_ball_pos.y,robot_pos.x,robot_pos.y);
 
-	if(robot_start_pos_flag==1)
+	if(path_plan_start==1)
 	{
 		dynamic_curve();
 
@@ -202,7 +210,7 @@ void path_run::path_cmd_callback(const r2_msgs::path_cmd::ConstPtr& path_cmd)
 		ROS_INFO("final_distance:%f",final_distance);
 		take_ball_time = final_distance/(take_ball_move_speed*1000);
 		last_target_ball_pos = target_ball_pos;
-		robot_start_pos_flag = 0;	//reset the start flag
+		path_plan_start = 0;	//reset the start flag
 	}
 
 	last_ball_pos = target_ball_pos;
@@ -227,37 +235,39 @@ void path_run::dynamic_curve()
 		{
 			ball_pos_X[i] = robot_start_pos.x;
 			ball_pos_Y[i] = robot_start_pos.y;
-			ball_pos_Yaw[i] = robot_start_pos.z;	
+			ball_pos_Yaw[i] = robot_start_pos.z;
 		}
 
 		ball_pos_X[3] = (target_ball_pos.x+robot_start_pos.x)/2;
 		ball_pos_Y[3] = (target_ball_pos.y+robot_start_pos.y)/2;
-		ball_pos_Yaw[3] = (target_ball_pos.z+robot_start_pos.z)/2;	
+		ball_pos_Yaw[3] = target_ball_pos.z;
 
 		for(int i=4;i<7;i++)
 		{
 			ball_pos_X[i] = target_ball_pos.x;
 			ball_pos_Y[i] = target_ball_pos.y;
-			ball_pos_Yaw[i] = target_ball_pos.z;	
+			ball_pos_Yaw[i] = target_ball_pos.z;
 		}
 	}
 	else
 	{
+		//增加一个可
 		ROS_INFO("dynamic_curve");
 		path_cos = abs(target_ball_pos.x-robot_start_pos.x)/ball_distance;
 		path_sin = abs(target_ball_pos.y-robot_start_pos.y)/ball_distance;
 
+		
 		if(target_ball_pos.x-robot_start_pos.x>0)
-			ball_pos_X[0] = (robot_pos.x + 500)*path_cos;
+			ball_pos_X[3] = (robot_pos.x + 0)*path_cos;
 		else
-			ball_pos_X[0] = (robot_pos.x - 500)*path_cos;
+			ball_pos_X[3] = (robot_pos.x - 0)*path_cos;
 
 		if(target_ball_pos.y-robot_start_pos.y>0)
-			ball_pos_Y[0] = (robot_pos.y + 500)*path_sin;
+			ball_pos_Y[3] = (robot_pos.y + 0)*path_sin;
 		else
-			ball_pos_Y[0] = (robot_pos.y - 500)*path_sin;
+			ball_pos_Y[3] = (robot_pos.y - 0)*path_sin;
 		
-		ball_pos_Yaw[3] = (target_ball_pos.z+robot_pos.z)/2;	
+		ball_pos_Yaw[3] = target_ball_pos.z;	
 
 		for(int i=4;i<7;i++)
 		{
@@ -340,8 +350,8 @@ void path_run::path_stauts(r2_msgs::path_cmd cmd)
 	{
 		if(distance_of_two_point(target_ball_pos.x,target_ball_pos.y,last_target_ball_pos.x,last_target_ball_pos.y)>1000)
 		{
-			robot_start_pos_flag = 1;
-			ROS_INFO("robot_start_pos_flag:%d",robot_start_pos_flag);
+			path_plan_start = 1;
+			ROS_INFO("path_plan_start:%d",path_plan_start);
 		}
 	}
 }

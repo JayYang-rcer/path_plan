@@ -16,7 +16,7 @@ enum PATH_ENUM
 	LockupPoint_e=1,
 	PATH1=2,
 	PATH2=3,
-	auto_take_put
+	TAKE_BALL
 };
 
 typedef enum

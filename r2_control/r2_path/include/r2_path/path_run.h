@@ -2,6 +2,7 @@
 #define __PLAN_RUN_H
 
 #include "r2_path/path_base.h"
+#include "r2_msgs/path_status.h"
 
 class path_run : public math_ns::math
 {
@@ -11,6 +12,9 @@ private:
     ros::Publisher vel_pub_;
     ros::Subscriber ball_pos_sub;
     ros::Publisher target_vel_pub;
+    ros::Publisher path_status_pub;
+
+    r2_msgs::path_status path_status_;
 
     float control_cycle;
     int path_res;
@@ -18,7 +22,7 @@ private:
     float move_time_counter=0;
     float ball_pos_X[7],ball_pos_Y[7],ball_pos_Yaw[7];
     float take_ball_time,take_ball_move_speed;
-    int robot_start_pos_flag;
+    int path_plan_start;
     float ball_distance;
     float final_distance;
     PATH_ENUM mode,last_mode,take_put_mode;

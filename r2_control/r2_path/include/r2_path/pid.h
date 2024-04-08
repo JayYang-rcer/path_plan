@@ -36,9 +36,8 @@ public:
 
 	~PID();
 	PID();
-
-	virtual float PID_Incremental_PID_Calculation_by_error(float error);
-	virtual float PID_Position_Calculate_by_error(float error);
+	float PID_Incremental_PID_Calculation_by_error(float error);
+	float PID_Position_Calculate_by_error(float error);
 };
 
 

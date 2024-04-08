@@ -1,4 +1,4 @@
 <launch>
-    <include file="$(find r2_path)/launch/path_test.launch" />
+    <include file="$(find r2_path)/launch/path_run.launch" />
     <include file="$(find r2_path)/launch/uart_start.launch" />
 </launch>

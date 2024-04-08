@@ -43,7 +43,7 @@ private:
     // std::string stm32_serial_port_;
     ros::Publisher pub;
     unsigned char recieve_buf[20] = {0}; 
-    unsigned char Buf[21] = {0};
+    unsigned char Buf[22] = {0};
 
     union Recieve_Union0
     {

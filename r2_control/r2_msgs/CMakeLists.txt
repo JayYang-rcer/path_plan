@@ -24,6 +24,7 @@ add_message_files(
   pid_info.msg
   controller_cmd.msg
   stm32.msg
+  path_status.msg
 )
 
 

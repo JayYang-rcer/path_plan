@@ -2,3 +2,6 @@ tf_server:
   offset_x: 0.0
   offset_y: 95.0
   offset_z: 0.0
+
+# sensor_type: "action"
+sensor_type: "lidar"

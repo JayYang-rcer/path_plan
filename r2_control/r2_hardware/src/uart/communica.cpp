@@ -10,6 +10,7 @@ namespace control_base
     {
     }
 
+    
 
     void CONTROL_BASE::SerialInit(const char* serial)
     {

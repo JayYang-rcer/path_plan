@@ -2,7 +2,7 @@
     <rosparam command="load" file="$(find r2_path)/config/path.yaml" />
     <!-- <node name="hand_joy" pkg="hand_control" type="hand_control_node" output="screen" /> -->
     <arg name="if_pub" value="1" />
-    <node name="odom_server" pkg="r2_sensor" type="action_msgs_server" output="screen" />
+    <node name="odom_server" pkg="r2_sensor" type="sensor_msgs_server" output="screen" />
     <node name="path_run" pkg="r2_path" type="path_run_node" output="screen" />
     <include file="$(find r2_sensor)/launch/r2_sensor_server.launch">
         <arg name="if_pub" value="$(arg if_pub)" />

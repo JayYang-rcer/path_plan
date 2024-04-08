@@ -11,7 +11,7 @@
         command="$(find xacro)/xacro $(find urdf01_gazebo)/urdf/omni_chassis/chassis.urdf.xacro" />
 
     <rosparam file="$(find rc_hw)/config/actuator_coefficient.yaml" command="load" ns="rc_hw"/>
-    <rosparam file="$(find plumbing_ros_32)/config/action_hw.yaml" command="load"/>
+    <rosparam file="$(find r2_path)/config/action_hw.yaml" command="load"/>
 
     <node name="rc_hw" pkg="rc_hw" type="rc_hw" respawn="false"
           clear_params="true"/>

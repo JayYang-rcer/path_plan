@@ -23,8 +23,8 @@ int main(int argc, char** argv)
 
         // 在msg中设置所需的数据
         msg.accel.angular.z = 4;
-        msg.accel.linear.x = 4;
-        msg.accel.linear.y = 4;
+        msg.accel.linear.x = 3;
+        msg.accel.linear.y = 3;
         // 发布消息
         publisher.publish(msg);
 

@@ -13,21 +13,22 @@ void doMsg(r2_msgs::controller_cmd::ConstPtr Msg_p)
 {
     msgs.cmd_vel.linear.x = Msg_p->cmd_vel.linear.x;
     msgs.cmd_vel.linear.y = Msg_p->cmd_vel.linear.y;
-    msgs.cmd_vel.angular.z = -Msg_p->cmd_vel.angular.z;
+    msgs.cmd_vel.angular.z = Msg_p->cmd_vel.angular.z;
     msgs.chassis_ctrl_flag = Msg_p->chassis_ctrl_flag;
     msgs.next_bp_state = Msg_p->next_bp_state;
     msgs.next_fw_state = Msg_p->next_fw_state;
-    
+    msgs.is_fw_open_flag = Msg_p->is_fw_open_flag;
     // ROS_INFO("Send!!!");
 }
 
 
 void node1Function()
 {
-    ros::Rate rate(50);
+    ros::Rate rate(500);
     ros::NodeHandle nh;
     while(ros::ok())
     {
+        ROS_INFO("Send!!!");
         base.ROS_WRITE_TO_STM32(msgs.cmd_vel.linear.x,msgs.cmd_vel.linear.y,
                                 msgs.cmd_vel.angular.z,msgs.chassis_ctrl_flag,
                                 msgs.next_bp_state,msgs.next_fw_state,msgs.is_fw_open_flag);
@@ -38,7 +39,7 @@ void node1Function()
 
 void node2Function()
 {
-    ros::Rate rate(50);
+    ros::Rate rate(500);
     while (ros::ok())
     {
         base.ROS_READ_FROM_STM32(stm32.current_bp_state,stm32.current_fw_state,

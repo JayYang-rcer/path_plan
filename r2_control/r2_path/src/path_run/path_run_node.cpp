@@ -6,6 +6,7 @@ int main(int argc, char *argv[])
 {
     /* code */
     ros::init(argc,argv,"plan_run");
+    
     path_run p;
     p.run();
     

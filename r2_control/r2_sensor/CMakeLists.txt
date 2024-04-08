@@ -31,19 +31,19 @@ include_directories(
 )
 
 
-add_executable(action_msgs_server src/action_msgs_server.cpp)
-target_link_libraries(action_msgs_server
+add_executable(sensor_msgs_server src/sensor_msgs_server.cpp)
+target_link_libraries(sensor_msgs_server
   ${catkin_LIBRARIES}
 )
 
 
-add_executable(action_tf_pub src/action_tf_pub.cpp)
-target_link_libraries(action_tf_pub
+add_executable(sensor_tf_pub src/sensor_tf_pub.cpp)
+target_link_libraries(sensor_tf_pub
   ${catkin_LIBRARIES}
 )
 
 
-add_executable(action_tf_sub src/action_tf_sub.cpp)
-target_link_libraries(action_tf_sub
+add_executable(sensor_tf_sub src/sensor_tf_sub.cpp)
+target_link_libraries(sensor_tf_sub
   ${catkin_LIBRARIES}
 )

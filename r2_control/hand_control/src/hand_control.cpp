@@ -16,8 +16,8 @@ namespace hand_control_ns
         r2_cmd_pub_ = nh_.advertise<r2_msgs::controller_cmd>("r2_control", 1);   
         // timer = nh_.createTimer(ros::Duration(0.1), &HandControl::timer_callback,this);
 
-        path_msg_.ball_position.x = 1500;   //init the take_ball's path point
-        path_msg_.ball_position.y = 2000;
+        path_msg_.ball_position.x = -3000;   //init the take_ball's path point
+        path_msg_.ball_position.y = -600;
         path_msg_.ball_position.z = 0;
     }
 
@@ -78,6 +78,7 @@ namespace hand_control_ns
             double COS,SIN;
             COS = cos(robot.angular.z/180 *PI);
             SIN = sin(robot.angular.z/180 *PI);
+            // ROS_INFO("%f",hand_cmd.angular.z);
 
             //世界坐标系转换
             //转化为转速
@@ -98,7 +99,7 @@ namespace hand_control_ns
                     controller.next_fw_state = FW_CONTROLLER_OFF;
                     controller.next_bp_state = BP_CONTROLLER_OFF;
                 }
-                else if(msg->sw_c==2)   //shoot ball
+                else if(msg->sw_c==2)   //shoot ball 
                 {
                     controller.next_bp_state = BP_SHOOT_BALL;
                     controller.next_fw_state = FW_CONTROLLER_OFF;
@@ -138,7 +139,7 @@ namespace hand_control_ns
                     
                     case 2:
                         // path_msg_.PathMode = LockupPoint_e;
-                        path_msg_.PathMode = auto_take_put;
+                        path_msg_.PathMode = TAKE_BALL;
                         break;
 
                     default:
