@@ -1,0 +1,3 @@
+geometry_msgs/Point now_target_point
+uint8 destination_arrived
+uint8 now_path_mode

@@ -1,4 +1,0 @@
-<launch>
-    <rosparam file="$(find rc_ibus)/config/rc_ibus.yaml" command="load"/>
-    <node name="rc_ibus" pkg="rc_ibus" type="rc_ibus"/>
-</launch>

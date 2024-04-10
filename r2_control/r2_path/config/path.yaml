@@ -1,0 +1,52 @@
+if_use_gazebo: 1
+field_direction: "right" 
+# joy_serial_port: "/dev/airRC"
+# stm32_serial_port: "/dev/stm32"
+joy_serial_port: "/dev/ttyUSB0"
+stm32_serial_port: "/dev/ttyUSB1"
+
+
+path_plan:
+  take_ball_move_speed: 1.6
+  control_cycle: 0.05
+
+  lockup:
+    {
+      target_pointX: 5500,
+      target_pointY: 500,
+      target_YAW: 0,
+    }
+  
+  path1:
+    {
+      path_control_point_num: 4,
+      path_use_time: 5,
+      path_pointX: [5500.0,5500.0,5500.0,5500.0,5500.0,1600,1600.0,1600.0],
+      path_pointY: [500.0,500.0,500.0,4000,6800,6200.0,6200.0,6500.0],
+      path_YAW: [0,0,0,0,0,0,0,0]
+    }
+    
+  path2:
+    {
+      path_control_point_num: 4,
+      path_use_time: 4.0,
+      path_pointX: [1600.0,1600.0,1500.0,1500.0,3000.0,4500.0,4500,4500.0],
+      path_pointY: [6500.0,6500.0,6500.0,9500,9500,9500,9500.0,9500.0],
+      path_YAW: [0, 0, 0, 0, 0, 0, 0, 0],
+    }
+
+  path1_pointX_pid: 
+    {
+      p: 0.0013, i: 0.00, d: 0.01, out_max: 2, dead_zone: 5.0, I_Separate: 0.0,  I_Limit: 0.0, pre_feed: 0.6
+    }
+
+  path1_pointY_pid: 
+    {
+      p: 0.0013, i: 0.00, d: 0.01, out_max: 2, dead_zone: 5.0, I_Separate: 0.0, I_Limit: 0.0, pre_feed: 0.6
+    }
+
+  path1_Yaw_pid: 
+    {
+      p: 0.01, i: 0.0, d: 0.05, out_max: 1.0, dead_zone: 1, I_Separate: 500, I_Limit: 500, pre_feed: 0.0
+    }
+  
