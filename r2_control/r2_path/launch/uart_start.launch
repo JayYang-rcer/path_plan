@@ -1,9 +1,0 @@
-<launch>
-    <!-- open uart to connect ros and stm32 --> 
-    <node pkg="r2_hardware" name="pub_process" type="pub_process" output="screen" />
-    <node pkg="r2_hardware" name="communicate_node" type="communicate_node" output="screen" />
-
-    <!-- open the hand joy with uart -->
-    <node pkg="rc_ibus" name="rc_ibus" type="rc_ibus" output="screen" />
-    <node pkg="hand_control" name="hand_control_node" type="hand_control_node" output="screen" />
-</launch>

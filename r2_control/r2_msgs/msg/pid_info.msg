@@ -1,6 +1,0 @@
-float32 PonitX_output
-float32 PonitY_output
-float32 YAW_output
-float32 PonitX_input
-float32 PonitY_input
-float32 YAW_input
