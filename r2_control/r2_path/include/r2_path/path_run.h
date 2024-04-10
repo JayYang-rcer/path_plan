@@ -13,12 +13,15 @@ private:
     ros::Subscriber ball_pos_sub;
     ros::Publisher target_vel_pub;
     ros::Publisher path_status_pub;
+    ros::Timer planner_timer;
 
     r2_msgs::path_status path_status_;
+    std::string field_direction;
+    int mirror_right;
 
     float control_cycle;
     int path_res;
-    int recieve_ball_flag;
+    int recieve_path_cmd_flag;
     float move_time_counter=0;
     float ball_pos_X[7],ball_pos_Y[7],ball_pos_Yaw[7];
     float take_ball_time,take_ball_move_speed;
@@ -35,6 +38,7 @@ private:
     geometry_msgs::Point last_target_ball_pos;
     geometry_msgs::Point pos_silo_one,pos_silo_two,pos_silo_three,pos_silo_four,pos_silo_five;
     void robot_coord_callback(const geometry_msgs::Point::ConstPtr& pos);
+    void planner_timer_callback(const ros::TimerEvent&);
 
     float Target_Lockup_X,Target_Lockup_Y,Target_Lockup_YAW;
     float path1_control_num,path1_t;

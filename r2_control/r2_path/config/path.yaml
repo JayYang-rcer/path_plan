@@ -1,5 +1,5 @@
 if_use_gazebo: 1
-field_direction: "right" 
+field_direction: "left" 
 # joy_serial_port: "/dev/airRC"
 # stm32_serial_port: "/dev/stm32"
 joy_serial_port: "/dev/ttyUSB0"
@@ -8,7 +8,7 @@ stm32_serial_port: "/dev/ttyUSB1"
 
 path_plan:
   take_ball_move_speed: 1.6
-  control_cycle: 0.05
+  control_cycle: 0.1
 
   lockup:
     {
@@ -30,7 +30,7 @@ path_plan:
     {
       path_control_point_num: 4,
       path_use_time: 4.0,
-      path_pointX: [1600.0,1600.0,1500.0,1500.0,3000.0,4500.0,4500,4500.0],
+      path_pointX: [1600.0,1600.0,1600.0,1500.0,3000.0,4500.0,4500,4500.0],
       path_pointY: [6500.0,6500.0,6500.0,9500,9500,9500,9500.0,9500.0],
       path_YAW: [0, 0, 0, 0, 0, 0, 0, 0],
     }

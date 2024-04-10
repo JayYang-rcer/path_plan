@@ -261,7 +261,7 @@ namespace path_base_ns
 
 		//PD跟踪器
 		PD_Controller(now_path_point,robot_pos);
-		// ROS_INFO("Vx=%f,Vy=%f,Vw=%f",now_path_point.x,now_path_point.y,now_path_point.z);
+		
 		last_X = now_path_point.x;
 		last_Y = now_path_point.y;
 		last_Yaw = now_path_point.z;
@@ -274,7 +274,6 @@ namespace path_base_ns
 			first_time_flag = 1;
 			return 1;
 		}
-		// ROS_INFO("%f %f %f",now_path_point.X,now_path_point.Y,now_path_point.Yaw);
 		return 0;
 	}
 
