@@ -40,13 +40,14 @@ uart_stm32::uart_stm32()
     chassis_sub = nh.subscribe<geometry_msgs::Twist>("/cmd_vel",1,&uart_stm32::do_vel_Msg,this);
 
     //use to acieve controller cmd without chassis
-    shangceng_sub = nh.subscribe<r2_msgs::controller_cmd>("r2_control",10,&uart_stm32::control_callback,this);   
+    upper_sub = nh.subscribe<r2_msgs::controller_cmd>("r2_control",10,&uart_stm32::control_callback,this);   
     timer = nh.createTimer(ros::Duration(0.5), &uart_stm32::timer_callback,this);// 创建定时器,触发的时间间隔为0.5秒
+    //use to send all control to hardware
     cmd_pub = nh.advertise<r2_msgs::controller_cmd>("r2_cmd",10);
     
-    controller.next_bp_state = 0;
+    controller.next_controller_state = CONTROLLER_OFF;
     controller.chassis_ctrl_flag = 0;
-    controller.next_fw_state = 0;
+    
 }
 
 uart_stm32::~uart_stm32()
@@ -68,9 +69,7 @@ void uart_stm32::do_vel_Msg(const geometry_msgs::Twist::ConstPtr &msg_p)
 void uart_stm32::control_callback(const r2_msgs::controller_cmd::ConstPtr &msg_p)
 {
     controller.chassis_ctrl_flag = msg_p->chassis_ctrl_flag;
-    controller.next_bp_state = msg_p->next_bp_state;
-    controller.next_fw_state = msg_p->next_fw_state;
-    controller.is_fw_open_flag = msg_p->is_fw_open_flag;
+    controller.next_controller_state = msg_p->next_controller_state;
     last_msg_time = ros::Time::now();   //获取更新上层控制命令的时间戳
 }
 
@@ -80,8 +79,7 @@ void uart_stm32::timer_callback(const ros::TimerEvent&)
     //超时1s，把上层控制命令置050
     if((ros::Time::now() - last_msg_time).toSec() >= 1.0f)
     {
-        controller.next_bp_state = BP_CONTROLLER_OFF;
-        controller.next_fw_state = FW_CONTROLLER_OFF;
+        controller.next_controller_state = CONTROLLER_OFF;
         // ROS_INFO("Reset the shangceng Controller state\r\n");
     }
 }

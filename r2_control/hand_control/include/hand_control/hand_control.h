@@ -16,23 +16,16 @@ enum PATH_ENUM
 	LockupPoint_e=1,
 	PATH1=2,
 	PATH2=3,
-	TAKE_BALL
+	TAKE_BALLS
 };
 
 typedef enum
 {
-    FW_INVERTED=2,  //摩擦轮反转
-    FW_TAKE_BALL,   //摩擦轮取球
-    FW_CONTROLLER_OFF,
-    BP_SHOOT_BALL,  //滚筒出球
-    BP_ABANDON_BALL,//滚筒筛球
-	BP_INVERTED,    //滚筒反转
-    BP_CONTROLLER_OFF,  //机构关闭
-
-    LINEAR_ACTUATOR_GO,
-    LINEAR_ACTUATOR_BACK,
-    LINEAR_ACTUATOR_OFF,
-    CONTROLLER_ERROR
+    TAKE_BALL =2,   //取球
+    FILTER_BALL,    //筛球
+    SHOOT_BALL,     //出球
+    CONTROLLER_OFF, //关闭
+    CONTROLLER_ERROR    //错误状态
 }CONTROLLER_STATE;
 
 namespace hand_control_ns

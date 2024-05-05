@@ -31,8 +31,8 @@ namespace control_base
         chassis_boost_serial_point->set_option(serial_port::character_size(8));
     }
 
-    //滚筒当前状态，吸球当前状态，球是否在框里标志位，颜色识别模块1，颜色识别模块2，颜色识别模块3
-    bool CONTROL_BASE::ROS_READ_FROM_STM32(unsigned char &current_bp_state,unsigned char &current_fw_state,unsigned char &is_ball_in_car,
+    //控制器当前状态，球的状态，颜色识别模块1，颜色识别模块2，颜色识别模块3
+    bool CONTROL_BASE::ROS_READ_FROM_UPPER(unsigned char &now_controller_state,unsigned char &ball_state,
                              unsigned char &color_flag1,unsigned char &color_flag2,unsigned char &color_flag3)
     {
         unsigned char length;   //数据长度
@@ -44,7 +44,7 @@ namespace control_base
             boost::asio::streambuf response;
             boost::system::error_code err;
             boost::asio::read_until(*boost_serial_point,response,"\r\n",err);
-            copy(istream_iterator<unsigned char>(istream(&response) >> noskipws), istream_iterator<unsigned char>(),recieve_buf);
+            copy(istream_iterator<unsigned char>(istream(&response) >> noskipws), istream_iterator<unsigned char>(),Recieve_buf);
             
         }
         catch(const std::exception& err)
@@ -55,7 +55,7 @@ namespace control_base
         //监察信息头
         for (int i = 0; i < 2; i++)
         {
-            if(recieve_buf[i] != serial_header[i])      //buf[0]    buf[1]
+            if(Recieve_buf[i] != serial_header[i])      //buf[0]    buf[1]
             {
                 std::cerr << "read_header_error" << std::endl;
                 return false;
@@ -63,67 +63,52 @@ namespace control_base
         }
         
         //数据长度
-        length = recieve_buf[2];        //buf[2]
+        length = Recieve_buf[2];        //buf[2]
         
         //检查信息校验值
-        check_value = serial_get_crc8_value(recieve_buf,length + 3);    //buf[6+3]=buf[9]
-        if(check_value != recieve_buf[3 + length])
+        check_value = serial_get_crc8_value(Recieve_buf,length + 3);    //buf[5+3]=buf[8]
+        if(check_value != Recieve_buf[3 + length])
         {
             std::cerr << "check_value_error" << std::endl;
             return false;
         }
         //标志位赋值
-        current_bp_state = recieve_buf[3];
-        current_fw_state = recieve_buf[4];
-        is_ball_in_car   = recieve_buf[5];
-        color_flag1      = recieve_buf[6];
-        color_flag2      = recieve_buf[7];
-        color_flag3      = recieve_buf[8];
+        now_controller_state = Recieve_buf[3];
+        ball_state = Recieve_buf[4];
+        color_flag1   = Recieve_buf[5];
+        color_flag2   = Recieve_buf[6];
+        color_flag3   = Recieve_buf[7];
 
         return true;
     }
 
-    void CONTROL_BASE::ROS_WRITE_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag, 
-                        unsigned char BP_ctrl_state, unsigned char FW_ctrl_state,unsigned char FW_open_flag)
+    void CONTROL_BASE::UPPER_TO_STM32(unsigned char next_ctrl_state)
     {
         // 协议数据缓存数组
         
         int i, Length = 0;
-
-        //底盘命令赋值
-        RosToStm32_Chassis_X.data = chassis_x;
-        RosToStm32_Chassis_Y.data = chassis_y;
-        RosToStm32_Chassis_W.data = chassis_w;
-
         //设置消息头
         for (i = 0; i < 2; i++)
         {
-            Buf[i] = serial_header[i];
+            Upper_Buf[i] = serial_header[i];          //Buf[0] Buf[1]
         }
 
-        Length = 16; //4*3 + 1 +1 + 1 +1= 16
-        Buf[2] = Length;    
-        for (i = 0; i < 4; i++) //数据填充
-        {
-            Buf[i+3] = RosToStm32_Chassis_X.tmp_array[i];
-            Buf[i+7] = RosToStm32_Chassis_Y.tmp_array[i];
-            Buf[i+11] = RosToStm32_Chassis_W.tmp_array[i];
-        }
-
-        // 预留控制指令
-        Buf[3 + Length - 4] = chassis_control_flag;             //buf[15]   
-        Buf[3 + Length - 3] = BP_ctrl_state;                    //buf[16]
-        Buf[3 + Length - 2] = FW_ctrl_state;                    //buf[17]
-        Buf[3 + Length - 1] = FW_open_flag;                  //Buf[18]
+        Length = 1; //上层控制命令
+        Upper_Buf[2] = Length;            //Buf[2]
+        // 控制指令
+        Upper_Buf[3 + Length - 1] = next_ctrl_state;                  //Buf[3]
         
         // 设置校验值、消息尾
-        Buf[3 + Length] = serial_get_crc8_value(Buf, 3 + Length);	//buf[19]
-        Buf[3 + Length + 1] = serial_ender[0];                      //buf[20]
-        Buf[3 + Length + 2] = serial_ender[1];                      //buf[21]
+        Upper_Buf[3 + Length] = serial_get_crc8_value(Upper_Buf, 3 + Length);	//buf[4]
+        Upper_Buf[3 + Length + 1] = serial_ender[0];                      //buf[5]
+        Upper_Buf[3 + Length + 2] = serial_ender[1];                      //buf[6]
 
         //串口发送数据
-        boost::asio::write(*boost_serial_point,boost::asio::buffer(Buf));
+        boost::asio::write(*boost_serial_point,boost::asio::buffer(Upper_Buf));
     }
+
+
+    
     void CONTROL_BASE::CHASSIS_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag)
     {
         // 协议数据缓存数组

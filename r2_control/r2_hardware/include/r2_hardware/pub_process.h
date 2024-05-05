@@ -13,7 +13,7 @@ private:
     int if_use_gazebo;
     ros::NodeHandle nh;
     ros::Subscriber chassis_sub;
-    ros::Subscriber shangceng_sub;
+    ros::Subscriber upper_sub;
     ros::Publisher cmd_pub;
     ros::Timer timer;
 
