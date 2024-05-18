@@ -52,7 +52,7 @@ void node3Function()
     while(ros::ok())
     {
         base.CHASSIS_TO_STM32(msgs.cmd_vel.linear.x,msgs.cmd_vel.linear.y,
-                                msgs.cmd_vel.angular.z,msgs.chassis_ctrl_flag);
+                                msgs.cmd_vel.angular.z,msgs.chassis_ctrl_flag,1);
         rate.sleep();
     }
    
@@ -71,12 +71,12 @@ int main(int argc, char *argv[])
     nh.param<std::string>("stm32_serial_port", upper_serial_port_, "/dev/stm32");
     nh.param<std::string>("chassis_serial_port", chassis_serial_port_, "/dev/chassis");
 
-  //  base.ChassisSerialInit(chassis_serial_port_.data());
+    base.ChassisSerialInit(chassis_serial_port_.data());
     base.SerialInit(upper_serial_port_.data());
 
     std::thread node1Thread(node1Function);         //upper
     std::thread node2Thread(node2Function);         //read
-    //std::thread node3Thread(node3Function);         //chassis
+    std::thread node3Thread(node3Function);         //chassis
     ROS_INFO("open uart with stm32 successfully!\n");
 
     ros::spin();

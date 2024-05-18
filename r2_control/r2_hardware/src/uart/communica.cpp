@@ -109,7 +109,7 @@ namespace control_base
 
 
     
-    void CONTROL_BASE::CHASSIS_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag)
+    void CONTROL_BASE::CHASSIS_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag,int8_t control_flag)
     {
         // 协议数据缓存数组
         
@@ -126,7 +126,7 @@ namespace control_base
             Chassis_Buf[i] = serial_header[i];      // 0 1
         }
 
-        Length = 13; //4*3 + 1= 13
+        Length = 14; //4*3 + 1 + 1= 14
         Chassis_Buf[2] = Length;    //2
         for (i = 0; i < 4; i++) //数据填充
         {
@@ -136,12 +136,13 @@ namespace control_base
         }
 
         // 预留控制指令
-        Chassis_Buf[3 + Length - 1] = chassis_control_flag;             //buf[15]   
-        
+        Chassis_Buf[3 + Length - 2] = chassis_control_flag;             //buf[15]   
+        Chassis_Buf[3 + Length - 1] = control_flag;                     //buf[16]
+
         // 设置校验值、消息尾
-        Chassis_Buf[3 + Length] = serial_get_crc8_value(Chassis_Buf, 3 + Length);	//buf[16]
-        Chassis_Buf[3 + Length + 1] = serial_ender[0];                      //buf[17]
-        Chassis_Buf[3 + Length + 2] = serial_ender[1];                      //buf[18]
+        Chassis_Buf[3 + Length] = serial_get_crc8_value(Chassis_Buf, 3 + Length);	//buf[17]
+        Chassis_Buf[3 + Length + 1] = serial_ender[0];                      //buf[18]
+        Chassis_Buf[3 + Length + 2] = serial_ender[1];                      //buf[19]
 
         //串口发送数据
         boost::asio::write(*chassis_boost_serial_point,boost::asio::buffer(Chassis_Buf));
