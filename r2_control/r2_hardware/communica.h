@@ -36,7 +36,7 @@ public:
     //上层发送
     void UPPER_TO_STM32(unsigned char next_ctrl_state);
     //底盘发送
-    void CHASSIS_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag);                            
+    void CHASSIS_TO_STM32(float chassis_x, float chassis_y, float chassis_w, unsigned char chassis_control_flag,int8_t control_flag);                            
     CONTROL_BASE();
     void SerialInit(const char* serial);    //上层串口初始化
     void ChassisSerialInit(const char* serial); //底盘串口初始化
@@ -50,7 +50,7 @@ private:
     ros::Publisher pub;
     unsigned char Recieve_buf[11] = {0}; 
     unsigned char Upper_Buf[7] = {0};
-    unsigned char Chassis_Buf[19] = {0}; //底盘发送缓存区   
+    unsigned char Chassis_Buf[20] = {0}; //底盘发送缓存区   
     // union Recieve_Union0
     // {
     //     short data;
