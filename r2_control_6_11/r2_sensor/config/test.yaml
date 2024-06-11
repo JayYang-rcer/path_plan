@@ -1,0 +1,7 @@
+tf_server:
+  offset_x: 0.0
+  offset_y: 95.0
+  offset_z: 0.0
+
+odom_topic: /odom
+camera_topic: /camera1/ball_position

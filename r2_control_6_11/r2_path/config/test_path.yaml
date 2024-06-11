@@ -1,0 +1,46 @@
+if_use_gazebo: true  #是否使用gazebo进行仿真
+if_use_debug: false  #是否开启路径调试模式
+field_direction: "left"   #左右场地的镜像操作
+joy_serial_port: "/dev/airRC" #手柄串口
+stm32_serial_port: "/dev/upper" #stm32上层串口
+chassis_serial_port: "/dev/chassis" #底盘串口
+# joy_serial_port: "/dev/ttyUSB0"
+# stm32_serial_port: "/dev/ttyUSB1"
+control_frequence: 20  #Hz
+
+take_ball:
+  if_use_decision: false  #是否接入行为树的放球决策
+  decision_topic: "decision_topic"
+  y_max: 11 #自由取球的y坐标最大值
+  y_min: 9 #自由取球的y坐标最小值
+  x_abs_max: 5 #自由取球的x坐标绝对值最大值
+
+path_plan:
+  take_ball_move_speed: 1
+  odom_topic: /robot_coordinate #最终的里程计话题，geometry_msgs/Point
+  takeBall_ChangeDistance: 0.5 #目标点变化的阈值，大于这个阈值才会重新进行路径规划
+
+  path1:
+    {
+      path_total_points: 120,
+      path_pointX: [5.5, 5.5, 5.5, 5.5, 6, 1.65, 1.65, 1.65],
+      path_pointY: [0.55, 0.55, 0.55, 4.0, 6.5, 6.2, 6.2, 6.5],                   
+      path_YAW: [0,0,0,0,0,0,0,0]
+    }
+    
+  path2:
+    {
+      path_total_points: 80,
+      path_pointX: [1.65, 1.65, 1.65, 1.55, 3.0, 4.5, 4.5, 4.5],
+      path_pointY: [6.5,6.5,6.5,9.5,9.5,9.5,9.5,9.5],
+      path_YAW: [0, 0, 0, 0, 0, 0, 0, 0],
+    }
+
+  silo_coordinate:
+    {
+      silo1: {x: 0.5, y: 8.5, z: 0.0},
+      silo2: {x: 0.5, y: 9.25, z: 0.0},
+      silo3: {x: 0.5, y: 10, z: 0.0},
+      silo4: {x: 0.5, y: 10.75, z: 0.0},
+      silo5: {x: 0.5, y: 11.5, z: 0.0},
+    }

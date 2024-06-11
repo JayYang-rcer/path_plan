@@ -1,0 +1,7 @@
+geometry_msgs/PoseStamped StartPose
+geometry_msgs/PoseStamped GoalPose
+uint8 PathMode
+bool PathChangeFlag
+
+---
+nav_msgs/Path Path

@@ -1,0 +1,9 @@
+<launch>
+    <arg name="if_pub" value="1" />
+
+    <rosparam command="load" file="$(find r2_config)/config/path.yaml" />
+    <node pkg="r2_path" name="path_app" type="path_app" output="screen" />
+    <include file="$(find r2_sensor)/launch/r2_sensor_server.launch">
+        <arg name="if_pub" value="$(arg if_pub)" />
+    </include> 
+</launch>

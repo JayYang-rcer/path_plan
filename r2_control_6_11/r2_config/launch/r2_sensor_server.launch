@@ -1,0 +1,8 @@
+<launch>
+    <rosparam file="$(find r2_sensor)/config/test.yaml" />
+    <param name="if_pub" value="$(arg if_pub)" default="0" />
+    
+    <node pkg="r2_sensor" name="sensor_msgs_server" type="sensor_msgs_server" output="screen" />
+    <node pkg="r2_sensor" name="sensor_tf_pub" type="sensor_tf_pub" output="screen" />
+    <node pkg="r2_sensor" name="sensor_tf_sub" type="sensor_tf_sub" output="screen" if="$(arg if_pub)" />
+</launch>

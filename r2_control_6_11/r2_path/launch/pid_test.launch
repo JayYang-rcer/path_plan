@@ -1,0 +1,4 @@
+<launch>
+    <rosparam command="load" file="$(find r2_config)/config/pid_config.yaml" />
+    <node pkg="r2_path" name="pid_follower" type="pid_follower" output="screen" />
+</launch>

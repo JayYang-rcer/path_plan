@@ -1,0 +1,11 @@
+#目标值
+nav_msgs/Path path
+
+---
+#最终结果
+int32 result
+
+---
+#连续反馈
+float64 progress_bar
+geometry_msgs/PoseStamped current_pose

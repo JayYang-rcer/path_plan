@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find r2_config)/launch/path_run.launch" />
+    <include file="$(find r2_config)/launch/uart_start.launch" />
+</launch>

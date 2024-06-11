@@ -1,0 +1,12 @@
+<launch>
+    <rosparam command="load" file="$(find r2_config)/config/path/path.yaml" />
+    <!-- <node name="hand_joy" pkg="hand_control" type="hand_control_node" output="screen" /> -->
+    <arg name="if_pub" value="1" />
+    <node name="odom_server" pkg="r2_sensor" type="sensor_msgs_server" output="screen" />
+    <node pkg="r2_path" name="path_app" type="path_app" output="screen" />
+    <rosparam command="load" file="$(find r2_config)/config/path/pid_config.yaml" />
+    <node pkg="r2_path" name="pid_follower" type="pid_follower" output="screen" />
+    <include file="$(find r2_config)/launch/r2_sensor_server.launch">
+        <arg name="if_pub" value="$(arg if_pub)" />
+    </include> 
+</launch>
